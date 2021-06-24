@@ -8,7 +8,9 @@ import androidx.fragment.app.Fragment
 import com.sachin.inothernews.R
 import com.sachin.inothernews.databinding.FragmentArticleBinding
 import com.sachin.inothernews.databinding.FragmentSearchNewsBinding
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class SearchNewsFragment : Fragment(R.layout.fragment_search_news) {
 
     lateinit var searchNewsBinding: FragmentSearchNewsBinding

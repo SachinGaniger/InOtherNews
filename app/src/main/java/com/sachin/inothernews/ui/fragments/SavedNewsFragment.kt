@@ -8,7 +8,9 @@ import androidx.fragment.app.Fragment
 import com.sachin.inothernews.R
 import com.sachin.inothernews.databinding.FragmentArticleBinding
 import com.sachin.inothernews.databinding.FragmentSavedNewsBinding
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class SavedNewsFragment : Fragment(R.layout.fragment_saved_news) {
 
     lateinit var savedNewsBinding: FragmentSavedNewsBinding

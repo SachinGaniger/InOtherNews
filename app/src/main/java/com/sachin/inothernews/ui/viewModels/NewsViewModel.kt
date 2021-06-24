@@ -1,5 +1,6 @@
 package com.sachin.inothernews.ui.viewModels
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -7,14 +8,15 @@ import com.sachin.inothernews.data.Article
 import com.sachin.inothernews.data.NewsResponse
 import com.sachin.inothernews.repositories.NewsRepository
 import com.sachin.inothernews.utils.Resource
+import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.scopes.ViewModelScoped
 import kotlinx.coroutines.launch
 import retrofit2.Response
 import javax.inject.Inject
 
-@ViewModelScoped
+@HiltViewModel
 class NewsViewModel @Inject constructor(
-    val repository: NewsRepository
+    private val repository: NewsRepository
 ) : ViewModel(){
     private val newsData: MutableLiveData<Resource<NewsResponse>> = MutableLiveData()
 
@@ -30,7 +32,7 @@ class NewsViewModel @Inject constructor(
             newsData.postValue(newsResponse)
         }
 
-    public fun handleBreakingNews(response: Response<NewsResponse>): Resource<NewsResponse> {
+    fun handleBreakingNews(response: Response<NewsResponse>): Resource<NewsResponse> {
 
         if(response.isSuccessful){
             response.body()?.let {newsResponse ->
@@ -39,6 +41,10 @@ class NewsViewModel @Inject constructor(
         }
         return Resource.Error(response.message())
 
+    }
+
+    fun getNewsData(): LiveData<Resource<NewsResponse>>{
+        return newsData
     }
 
 

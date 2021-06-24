@@ -19,18 +19,20 @@ object NewsAppModule {
 
     @Singleton
     @Provides
-    fun provideHttpClient() = if(BuildConfig.DEBUG) {
+    fun provideHttpClient() : OkHttpClient {
+//        if(BuildConfig.DEBUG) {
 
         val loggingInterceptor = HttpLoggingInterceptor()
         loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY)
 
-        OkHttpClient.Builder()
+        return OkHttpClient.Builder()
             .addInterceptor(loggingInterceptor)
             .build()
-    } else {
-        OkHttpClient.Builder().build()
-
     }
+//    } else {
+//        OkHttpClient.Builder().build()
+//
+//    }
 
     @Singleton
     @Provides

@@ -2,15 +2,15 @@ package com.sachin.inothernews.ui.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.recyclerview.widget.AsyncListDiffer
-import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.sachin.inothernews.data.Article
 import com.sachin.inothernews.databinding.ItemArticlePreviewBinding
 import timber.log.Timber
 
-class NewsAdapter(): RecyclerView.Adapter<NewsAdapter.ViewHolder>() {
+class NewsAdapter(
+    private val newsArticles : List<Article>
+): RecyclerView.Adapter<NewsAdapter.ViewHolder>() {
 
 
     class ViewHolder(private val articlePreviewBinding: ItemArticlePreviewBinding) : RecyclerView.ViewHolder(articlePreviewBinding.root ) {
@@ -35,19 +35,6 @@ class NewsAdapter(): RecyclerView.Adapter<NewsAdapter.ViewHolder>() {
         onItemClickListener = listener
     }
 
-    private val differCallback = object : DiffUtil.ItemCallback<Article>() {
-        override fun areItemsTheSame(oldItem: Article, newItem: Article): Boolean {
-            return oldItem.url == newItem.url
-        }
-
-        override fun areContentsTheSame(oldItem: Article, newItem: Article): Boolean {
-            return oldItem == newItem
-        }
-
-    }
-
-    val differ = AsyncListDiffer(this, differCallback)
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NewsAdapter.ViewHolder {
 
         val view = ItemArticlePreviewBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -56,8 +43,7 @@ class NewsAdapter(): RecyclerView.Adapter<NewsAdapter.ViewHolder>() {
     }
 
     override fun onBindViewHolder(holder: NewsAdapter.ViewHolder, position: Int) {
-        val article = differ.currentList[position]
-//        val article = newsArticles[position]
+        val article = newsArticles[position]
         holder.bind(article)
         holder.itemView.setOnClickListener {
             Timber.d("recycler item clicked!")
@@ -67,8 +53,7 @@ class NewsAdapter(): RecyclerView.Adapter<NewsAdapter.ViewHolder>() {
     }
 
     override fun getItemCount(): Int {
-//       return newsArticles.size
-       return differ.currentList.size
+       return newsArticles.size
     }
 
 
