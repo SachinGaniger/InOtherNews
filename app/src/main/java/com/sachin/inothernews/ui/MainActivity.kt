@@ -4,10 +4,12 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.PersistableBundle
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.setupWithNavController
 import com.sachin.inothernews.R
 import com.sachin.inothernews.databinding.ActivityMainBinding
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.android.synthetic.main.activity_main.*
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -23,11 +25,8 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?, persistentState: PersistableBundle?) {
         super.onCreate(savedInstanceState, persistentState)
 
-        mainBinding.apply {
-
-            bottomNavigationView.setupWithNavController(findNavController(R.id.newsNavHostFragment))
-
-        }
+        //            bottomNavigationView.setupWithNavController(findNavController(R.id.newsNavHostFragment))
+        mainBinding.bottomNavigationView.setupWithNavController(newsNavHostFragment.findNavController())
 
     }
 }

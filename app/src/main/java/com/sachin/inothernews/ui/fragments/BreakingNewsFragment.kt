@@ -8,6 +8,9 @@ import android.view.View
 import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
+import android.widget.Adapter
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -19,6 +22,7 @@ import com.sachin.inothernews.ui.adapters.NewsAdapter
 import com.sachin.inothernews.ui.viewModels.NewsViewModel
 import com.sachin.inothernews.utils.Resource
 import dagger.hilt.android.AndroidEntryPoint
+import timber.log.Timber
 
 @AndroidEntryPoint
 class BreakingNewsFragment : Fragment(R.layout.fragment_breaking_news) {
@@ -39,12 +43,43 @@ class BreakingNewsFragment : Fragment(R.layout.fragment_breaking_news) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel.getBreakingNews("in", 1)
+
+        val countryListMap = mapOf("in" to "India", "us" to "USA", "gb" to "UK", "fr" to "France", "de" to "Germany")
+
+        val countryList = countryListMap.values.toList()
+
+        val spinnerAdapter = ArrayAdapter(requireActivity(), android.R.layout.simple_spinner_item, countryList).also { adapter ->
+            // Specify the layout to use when the list of choices appears
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            // Apply the adapter to the spinner
+
+        }
+
+        breakingNewsBinding.spCountry.adapter = spinnerAdapter
+
+        breakingNewsBinding.spCountry.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                Timber.d(countryListMap.keys.toList()[position])
+                viewModel.getBreakingNews(countryListMap.keys.toList()[position], 1)
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+                TODO("Not yet implemented")
+            }
+
+        }
 
         observeNews()
         breakingNewsBinding.rvBreakingNews.layoutManager = LinearLayoutManager(activity)
         newsAdapter = NewsAdapter()
         breakingNewsBinding.rvBreakingNews.adapter = newsAdapter
+
+
 
         newsAdapter?.setOnItemClickListener {
             val bundle = Bundle().apply {
